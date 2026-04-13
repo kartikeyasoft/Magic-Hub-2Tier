@@ -51,3 +51,143 @@ Designed for easy deployment on two separate VMs (or local machines) with Nginx 
 
 ---
 
+
+
+
+
+
+
+# 🧙 Server Magic Input Hub – 2‑Tier Full‑Stack Application
+
+A modern task manager with a magic spell theme. Frontend (React) + Backend (Node.js/Express). Deploy on two VMs.
+
+## Quick Start
+
+### Backend VM
+```bash
+git clone <repo>
+cd server-magic-hub
+sudo bash setup/backend-setup.sh
+```
+
+### Frontend VM
+1. Edit `setup/frontend-setup.sh` and set `BACKEND_IP` to your backend VM IP.
+2. Run:
+```bash
+sudo bash setup/frontend-setup.sh
+```
+
+Then open `http://<frontend-ip>` in your browser.
+
+## Architecture
+
+- Backend: Node.js, port 5000, in‑memory storage.
+- Frontend: React + Nginx, proxies `/api` to backend.
+
+## License
+
+MIT © KartikeyaSoft
+```
+
+---
+
+## 🚀 Execution Steps (One by One)
+
+### On your **local machine** (or any development machine):
+
+1. **Create the project folder and all files**  
+   Copy the entire structure above. You can do it manually or use the commands below:
+
+```bash
+mkdir -p server-magic-hub/{backend,frontend/{public,src},setup}
+cd server-magic-hub
+
+# Create backend files
+cat > backend/package.json << 'EOF'
+... (paste package.json content) ...
+EOF
+
+cat > backend/server.js << 'EOF'
+... (paste server.js content) ...
+EOF
+
+# Create frontend files
+cat > frontend/public/index.html << 'EOF'
+... (paste index.html content) ...
+EOF
+
+cat > frontend/src/App.js << 'EOF'
+... (paste App.js content) ...
+EOF
+
+# Create setup scripts
+cat > setup/backend-setup.sh << 'EOF'
+... (paste backend-setup.sh content) ...
+EOF
+
+cat > setup/frontend-setup.sh << 'EOF'
+... (paste frontend-setup.sh content) ...
+EOF
+
+# Make scripts executable
+chmod +x setup/*.sh
+
+# Create README (optional)
+cat > README.md << 'EOF'
+... (paste README.md content) ...
+EOF
+```
+
+2. **Push to a Git repository** (optional but convenient) or directly copy the `server-magic-hub` folder to both VMs.
+
+### On **Backend VM** (VM2):
+
+1. Copy the entire `server-magic-hub` folder to the VM (e.g., via `scp` or Git clone).
+2. Navigate into the folder:
+   ```bash
+   cd server-magic-hub
+   ```
+3. Run the backend setup script:
+   ```bash
+   sudo bash setup/backend-setup.sh
+   ```
+4. Note the backend IP address:
+   ```bash
+   hostname -I
+   ```
+   Example output: `192.168.29.38`
+
+### On **Frontend VM** (VM1):
+
+1. Copy the `server-magic-hub` folder to this VM as well.
+2. Edit the frontend setup script to set the correct backend IP:
+   ```bash
+   cd server-magic-hub
+   nano setup/frontend-setup.sh
+   ```
+   Change the line:
+   ```bash
+   BACKEND_IP="BACKEND_IP_PLACEHOLDER"
+   ```
+   to:
+   ```bash
+   BACKEND_IP="192.168.29.38"   # use actual backend IP
+   ```
+3. Run the frontend setup:
+   ```bash
+   sudo bash setup/frontend-setup.sh
+   ```
+4. Access the application at the frontend VM’s IP:
+   ```
+   http://<frontend-vm-ip>
+   ```
+
+### Verification
+
+- Backend API test:  
+  `curl http://<backend-ip>:5000/api/todos` should return JSON.
+- Frontend web page: shows the **Server Magic Input Hub** UI with 5 default spells.
+
+---
+
+Now you have a complete, copy‑paste ready project with **clear, step‑by‑step** execution. All files are exactly as requested.
