@@ -51,16 +51,6 @@ Designed for easy deployment on two separate VMs (or local machines) with Nginx 
 
 ---
 
-
-
-
-
-
-
-# 🧙 Server Magic Input Hub – 2‑Tier Full‑Stack Application
-
-A modern task manager with a magic spell theme. Frontend (React) + Backend (Node.js/Express). Deploy on two VMs.
-
 ## Quick Start
 
 ### Backend VM
