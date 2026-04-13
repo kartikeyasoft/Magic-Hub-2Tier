@@ -10,6 +10,7 @@ Designed for easy deployment on two separate VMs (or local machines) with Nginx 
 ---
 
 ## 🏗️ Architecture
+<img width="501" height="185" alt="image" src="https://github.com/user-attachments/assets/404363f2-9313-4b49-87bc-a9db8a73ed9c" />
 
 
 
