@@ -11,58 +11,103 @@ Designed for easy deployment on two separate VMs (or local machines) with Nginx 
 
 ## 🏗️ Architecture
 
-<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .box {
-      fill: #4A90E2;
-      stroke: #333;
-      stroke-width: 2;
-    }
-    .text {
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      fill: white;
-    }
-    .arrow {
-      fill: none;
-      stroke: #333;
-      stroke-width: 2;
-      marker-end: url(#arrowhead);
-    }
-    .label {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      fill: #333;
-    }
-  </style>
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" />
-    </marker>
-  </defs>
-  
-  <!-- Frontend VM -->
-  <rect x="50" y="50" width="200" height="150" class="box"/>
-  <text x="150" y="70" class="text" text-anchor="middle">Frontend VM (VM1)</text>
-  
-  <rect x="70" y="90" width="160" height="40" class="box"/>
-  <text x="150" y="115" class="text" text-anchor="middle">Nginx (Port 80)</text>
-  
-  <rect x="70" y="140" width="160" height="40" class="box"/>
-  <text x="150" y="165" class="text" text-anchor="middle">React SPA (build)</text>
-  
-  <!-- Backend VM -->
-  <rect x="350" y="50" width="200" height="150" class="box"/>
-  <text x="450" y="70" class="text" text-anchor="middle">Backend VM (VM2)</text>
-  
-  <rect x="370" y="90" width="160" height="40" class="box"/>
-  <text x="450" y="115" class="text" text-anchor="middle">Node.js (Port 5000)</text>
-  
-  <rect x="370" y="140" width="160" height="40" class="box"/>
-  <text x="450" y="165" class="text" text-anchor="middle">In‑memory store</text>
-  
-  <!-- Arrows -->
-  <line x1="250" y1="115" x2="350" y2="115" class="arrow"/>
-  <text x="300" y="105" class="label" text-anchor="middle">/api/*</text>
-</svg>
 
+
+- **Frontend (VM1)**: React application served by Nginx. All API calls are proxied to the backend VM.
+- **Backend (VM2)**: Node.js + Express REST API. Data is stored in memory (volatile, for demo/development).
+- **Communication**: HTTP over private network. CORS enabled.
+
+---
+
+## 🚀 Features
+
+- ✨ **Modern glassmorphism UI** – soft gradients, rounded cards, smooth animations.
+- ⚡ **Real‑time task status** – mark tasks as `PENDING` / `EXECUTED` (completed).
+- 🧙 **Magic spell theme** – tasks are called “spells”, adding a playful console vibe.
+- 🔁 **RESTful API** – full CRUD operations (Create, Read, Update, Delete).
+- 🐳 **Docker‑ready** – both frontend and backend can be containerised (optional).
+- 🔒 **Systemd integration** – auto‑start and restart on VM boot.
+
+---
+
+## 🛠️ Technologies Used
+
+| Component       | Technology                                 |
+|----------------|--------------------------------------------|
+| Frontend       | React, Axios, Styled‑Components, FontAwesome |
+| Backend        | Node.js, Express, CORS                     |
+| Web Server     | Nginx (reverse proxy for frontend)         |
+| Process Manager| systemd                                    |
+| Firewall       | UFW                                        |
+| OS             | Ubuntu / Debian (or any Linux)             |
+
+---
+
+## 📦 Deployment Guide (Two Separate VMs)
+
+### Prerequisites
+- Two Linux VMs (or machines) with **Ubuntu 20.04+**.
+- **Backend VM IP** (e.g., `192.168.29.38`) – known in advance.
+- **Frontend VM IP** – will be the public access point.
+- Both VMs have internet access to install packages.
+
+---
+
+### 1️⃣ Backend Setup (VM2)
+
+Run these commands **on the backend VM**.
+
+```bash
+# Install Node.js 18.x
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs ufw
+
+# Create directory
+sudo mkdir -p /var/www/magic-hub-backend
+sudo chown -R $USER:$USER /var/www/magic-hub-backend
+cd /var/www/magic-hub-backend
+
+# Create package.json
+cat > package.json << 'EOF'
+{
+  "name": "magic-hub-backend",
+  "version": "1.0.0",
+  "description": "Backend for Server Magic Input Hub",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "^4.18.2", "cors": "^2.8.5" }
+}
+EOF
+
+# Create server.js (copy from the full script below)
+# See full server.js content in the repository
+
+# Install dependencies
+npm install
+
+# Create systemd service
+sudo tee /etc/systemd/system/magic-hub-backend.service > /dev/null << EOF
+[Unit]
+Description=Server Magic Hub Backend
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=/var/www/magic-hub-backend
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Start service
+sudo systemctl daemon-reload
+sudo systemctl start magic-hub-backend
+sudo systemctl enable magic-hub-backend
+
+# Allow port 5000 in firewall
+sudo ufw allow 5000/tcp
+echo "y" | sudo ufw enable
