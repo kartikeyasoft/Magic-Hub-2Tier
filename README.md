@@ -84,60 +84,6 @@ Then open `http://<frontend-ip>` in your browser.
 - Backend: Node.js, port 5000, in‑memory storage.
 - Frontend: React + Nginx, proxies `/api` to backend.
 
-## License
-
-MIT © KartikeyaSoft
-```
-
----
-
-## 🚀 Execution Steps (One by One)
-
-### On your **local machine** (or any development machine):
-
-1. **Create the project folder and all files**  
-   Copy the entire structure above. You can do it manually or use the commands below:
-
-```bash
-mkdir -p server-magic-hub/{backend,frontend/{public,src},setup}
-cd server-magic-hub
-
-# Create backend files
-cat > backend/package.json << 'EOF'
-... (paste package.json content) ...
-EOF
-
-cat > backend/server.js << 'EOF'
-... (paste server.js content) ...
-EOF
-
-# Create frontend files
-cat > frontend/public/index.html << 'EOF'
-... (paste index.html content) ...
-EOF
-
-cat > frontend/src/App.js << 'EOF'
-... (paste App.js content) ...
-EOF
-
-# Create setup scripts
-cat > setup/backend-setup.sh << 'EOF'
-... (paste backend-setup.sh content) ...
-EOF
-
-cat > setup/frontend-setup.sh << 'EOF'
-... (paste frontend-setup.sh content) ...
-EOF
-
-# Make scripts executable
-chmod +x setup/*.sh
-
-# Create README (optional)
-cat > README.md << 'EOF'
-... (paste README.md content) ...
-EOF
-```
-
 2. **Push to a Git repository** (optional but convenient) or directly copy the `server-magic-hub` folder to both VMs.
 
 ### On **Backend VM** (VM2):
@@ -187,7 +133,3 @@ EOF
 - Backend API test:  
   `curl http://<backend-ip>:5000/api/todos` should return JSON.
 - Frontend web page: shows the **Server Magic Input Hub** UI with 5 default spells.
-
----
-
-Now you have a complete, copy‑paste ready project with **clear, step‑by‑step** execution. All files are exactly as requested.
